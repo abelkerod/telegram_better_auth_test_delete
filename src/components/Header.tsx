@@ -1,6 +1,12 @@
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
+import { Authenticated } from "@/features/auth/components/Authenticated"
+import { Unauthenticated } from "@/features/auth/components/Unauthenticated"
+
+import { Button } from "../components/ui/button"
 
 export default function Header() {
+  const navigate = useNavigate()
+
   return (
     <nav className="flex flex-row w-full justify-between p-4 ">
       <div className="flex">
@@ -23,9 +29,17 @@ export default function Header() {
       </div>
 
       <div className="flex">
-        <div className="px-2 font-bold">
-          <Link to="/demo/tanstack-query">TanStack Query</Link>
-        </div>
+        <Unauthenticated>
+          <Button onClick={() => navigate({ to: "/auth", search: prev => ({ ...prev, mode: "login" }) })} size="lg">
+            Sign In
+          </Button>
+
+        </Unauthenticated>
+        <Authenticated>
+          <div className="px-2 font-bold">
+            <Link to="/demo/tanstack-query">Sign Out</Link>
+          </div>
+        </Authenticated>
       </div>
     </nav>
   )
