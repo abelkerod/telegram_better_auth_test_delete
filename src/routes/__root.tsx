@@ -5,6 +5,7 @@ import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 
+import { Toaster } from "@/components/ui/sonner"
 import { env } from "@/env"
 import Header from "../components/Header"
 
@@ -15,6 +16,8 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <main className="flex flex-col min-h-screen w-full overflow-hidden">
+      <Toaster position="top-center" richColors />
+
       <div className="w-2/3 mx-auto bg-red-200">
         <Header />
       </div>
