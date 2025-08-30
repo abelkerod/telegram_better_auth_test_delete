@@ -1,7 +1,8 @@
 import type { AppType } from "@backend/app"
 import { hc } from "hono/client"
+import { env } from "@/env"
 
-const client = hc<AppType>("http://localhost:9090", {
+const client = hc<AppType>(env.VITE_BACKEND_URL, {
   fetch: ((input, init) => {
     return fetch(input, {
       ...init,
