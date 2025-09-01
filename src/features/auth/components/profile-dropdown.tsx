@@ -1,5 +1,7 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import type { User } from "../lib/type"
+import { Check, ChevronDown, LogOut, Users } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,44 +10,41 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-// import { useSignInWithRole } from "@/features/auth/lib/hooks/useSignInWithRole";
-import { cn } from "@/lib/utils";
-import { useRouteContext, useRouter } from "@tanstack/react-router";
-import { Check, ChevronDown, LogOut, Users } from "lucide-react";
-import { ThemeToggle } from "@/components/custom/theme-toggle";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useSidebar } from "@/components/ui/sidebar";
+} from "@/components/ui/dropdown-menu"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { useSidebar } from "@/components/ui/sidebar"
 
-import type { User } from "../lib/type";
+// import { useSignInWithRole } from "@/features/auth/lib/hooks/useSignInWithRole";
+import { cn } from "@/lib/utils"
+import { ThemeToggle } from "./theme-toggle"
 
 function getNameInitials(fullName: string | null | undefined): string {
   if (!fullName)
-    return "?";
-  const names = fullName.trim().split(/\s+/);
+    return "?"
+  const names = fullName.trim().split(/\s+/)
   if (names.length === 0 || names[0] === "")
-    return "?";
+    return "?"
   if (names.length === 1)
-    return names[0].charAt(0).toUpperCase();
-  return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+    return names[0].charAt(0).toUpperCase()
+  return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase()
 }
 
 export function ProfileDropdown() {
   // const Auth = useRouteContext({ strict: false })?.Auth;
   // const { signInWithRole } = useSignInWithRole();
-  const jwt = localStorage.getItem("token")!;
-  const user = { full_name: "Jhon Doe", default_role: "owner", allowed_roles: ["owner", "tenant"] } as User;
+  const jwt = localStorage.getItem("token")!
+  const user = { full_name: "Jhon Doe", default_role: "owner", allowed_roles: ["owner", "tenant"] } as User
 
   const handleLogout = async () => {
     // await Auth?.logout();
     // await router.invalidate();
-  };
+  }
 
   const handleSwitchRole = async (newRole: string) => {
     // await signInWithRole({ jwt, role: newRole.toUpperCase() });
-  };
+  }
 
-  const { state } = useSidebar();
+  const { state } = useSidebar()
 
   return (
 
@@ -173,9 +172,9 @@ export function ProfileDropdown() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
 function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }

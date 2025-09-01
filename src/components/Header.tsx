@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import { Authenticated } from "@/features/auth/components/Authenticated"
 import { Unauthenticated } from "@/features/auth/components/Unauthenticated"
 
+import { signOut } from "@/lib/auth-client"
 import { Button } from "../components/ui/button"
 
 export default function Header() {
@@ -36,9 +37,9 @@ export default function Header() {
 
         </Unauthenticated>
         <Authenticated>
-          <div className="px-2 font-bold">
-            <Link to="/demo/tanstack-query">Sign Out</Link>
-          </div>
+          <Button onClick={() => signOut()} size="lg">
+            Sign Out
+          </Button>
         </Authenticated>
       </div>
     </nav>

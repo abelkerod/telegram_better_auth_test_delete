@@ -2,7 +2,7 @@ import type { HTMLInputTypeAttribute } from "react"
 import { useStore } from "@tanstack/react-form"
 import { useRef } from "react"
 import { Input } from "@/components/ui/input"
-import { useFieldContext } from "@/hooks/demo.form-context"
+import { useFieldContext } from "@/lib/TanstackFormHook"
 import { cn } from "@/lib/utils"
 
 /* ---------- helpers ---------- */
@@ -74,7 +74,7 @@ export function FormInput({
       <div className="relative">
         <Input
           ref={inputRef}
-          type="text"
+          type={type}
           inputMode={decorate || type === "number" ? "decimal" : "text"}
           placeholder={placeholder}
           value={decorate ? formatNumber(rawValue) : rawValue}

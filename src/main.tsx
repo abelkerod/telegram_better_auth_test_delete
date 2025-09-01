@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
 
+import { ThemeProvider } from "./components/custom/theme-provider"
 import { routeTree } from "./routeTree.gen"
 import "./styles.css"
 
@@ -35,9 +36,11 @@ const rootElement = document.getElementById("app")
 if (rootElement && !rootElement.innerHTML) {
   ReactDOM.createRoot(rootElement).render(
     <StrictMode>
-      <QueryProvider>
-        <RouterProvider router={router} />
-      </QueryProvider>
+      <ThemeProvider defaultTheme="light" storageKey="zemen-bus">
+        <QueryProvider>
+          <RouterProvider router={router} />
+        </QueryProvider>
+      </ThemeProvider>
     </StrictMode>,
   )
 }

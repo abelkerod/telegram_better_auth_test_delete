@@ -1,56 +1,52 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+import { revalidateLogic } from "@tanstack/react-form"
 import { useNavigate } from "@tanstack/react-router"
 import { AlertCircle } from "lucide-react"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { getAuthErrorMessage, signIn } from "@/lib/auth-client"
+import { getAuthErrorMessage, signIn, signUp } from "@/lib/auth-client"
+import { useAppForm } from "@/lib/TanstackFormHook"
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
 })
-type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
   const navigate = useNavigate({ from: "/auth" })
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+
+  const form = useAppForm({
     defaultValues: { email: "", password: "" },
-  })
-
-  const onSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const { error } = await signIn.email({
-        email: data.email,
-        password: data.password,
-      })
-      if (error) {
-        toast.error(getAuthErrorMessage(error.code))
-        console.error(error)
-        return
+    validationLogic: revalidateLogic({
+      mode: "submit",
+      modeAfterSubmission: "change",
+    }),
+    validators: {
+      onDynamic: loginSchema,
+    },
+    onSubmit: async ({ value }) => {
+      setError(null)
+      try {
+        const { error } = await signIn.email({
+          email: value.email,
+          password: value.password,
+        })
+        if (error) {
+          toast.error(getAuthErrorMessage(error.code))
+          console.error(error)
+          return
+        }
+        toast.success("Welcome back!")
+        navigate({ search: prev => ({ ...prev, mode: undefined, email: undefined }) })
       }
-      toast.success("Welcome back!")
-      navigate({ search: prev => ({ ...prev, mode: undefined, email: undefined }) })
-    }
-    catch {
-      toast.error("Failed to sign in.")
-    }
-    finally {
-      setIsLoading(false)
-    }
-  }
+      catch {
+        toast.error("Failed to sign in.")
+      }
+    },
+  })
 
   return (
     <div className="space-y-6 py-2">
@@ -68,41 +64,42 @@ export default function LoginForm() {
         </Alert>
       )}
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            {...form.register("email")}
-            disabled={isLoading}
-          />
-          {form.formState.errors.email && (
-            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-          </div>
-          <Input
-            id="password"
-            type="password"
-            {...form.register("password")}
-            disabled={isLoading}
-          />
-          {form.formState.errors.password && (
-            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
-          )}
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Signing in…" : "Sign In"}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit()
+        }}
+        className="space-y-4"
+      >
+        <form.AppField
+          name="email"
+          children={field => <field.FormInput label="Email" type="email" />}
+        />
+        <form.AppField
+          name="password"
+          children={field => <field.FormInput label="Password" type="password" />}
+        />
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.state.isSubmitting}
+        >
+          {form.state.isSubmitting ? "Signing in…" : "Sign In"}
         </Button>
       </form>
-
+      <Button
+        onClick={() => {
+          signUp.email({
+            name: "Abel Girma",
+            email: "abelgirma@gmail.com",
+            password: "abelgirma",
+            fetchOptions: { credentials: "include" },
+          })
+        }}
+      >
+        Singup
+      </Button>
     </div>
   )
 }
