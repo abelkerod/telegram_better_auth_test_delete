@@ -1,5 +1,5 @@
-import { Home, Building2, Users, Settings, Shield, CreditCard, FileText  } from "lucide-react";
-import type { SidebarData } from "./types";
+import type { SidebarData } from "./types"
+import { Building2, CreditCard, FileText, Home, Settings, Shield, Users } from "lucide-react"
 
 export const sidebarData: SidebarData = {
   navGroups: [
@@ -47,7 +47,7 @@ export const sidebarData: SidebarData = {
           requiredRoles: ["owner", "admin"],
         },
       ],
-    },     
+    },
 
     /* ── 3. Users (forced expanded) ───────────────────────────── */
     {
@@ -68,5 +68,17 @@ export const sidebarData: SidebarData = {
         },
       ],
     },
+    /* ── 4. Organizations (for superadmin) ───────────────────────── */
+    {
+      title: "Organizations",
+      items: [
+        {
+          title: "Manage Organizations",
+          url: "/",
+          icon: Building2,
+          requiredRoles: ["superadmin"],
+        },
+      ],
+    },
   ],
-};
+}
