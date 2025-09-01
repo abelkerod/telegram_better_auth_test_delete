@@ -1,4 +1,5 @@
-import { useMemo } from "react" // Import useMemo for performance
+import type { Role } from "@backend/lib/auth/permissions"
+import { useMemo } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -36,8 +37,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         .map(group => ({
           ...group,
           items: group.items.filter((item) => {
-            const hasSystemRole = systemRole && item.requiredRoles.includes(systemRole)
-            const hasOrgRole = organizationRole && item.requiredRoles.includes(organizationRole)
+            const hasSystemRole = systemRole && item.requiredRoles.includes(systemRole as Role)
+            const hasOrgRole = organizationRole && item.requiredRoles.includes(organizationRole as Role)
             return hasSystemRole || hasOrgRole
           }),
         }))
