@@ -74,7 +74,7 @@ export const sidebarData: SidebarData = {
       items: [
         {
           title: "Manage Organizations",
-          url: "/",
+          url: "/organizations",
           icon: Building2,
           requiredRoles: ["superAdmin"],
         },
