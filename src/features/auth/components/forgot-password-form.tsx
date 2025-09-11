@@ -1,18 +1,17 @@
 // src/features/auth/forgot-password-form.tsx
 "use client"
 
-import type React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { revalidateLogic } from "@tanstack/react-form"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { AlertCircle, ArrowLeft } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAppForm } from "@/lib/TanstackFormHook"
 
 const forgotPasswordSchema = z
   .object({
@@ -40,14 +39,22 @@ export default function ForgotPasswordForm() {
   const navigate = useNavigate({ from: "/auth" })
   const { email: emailFromUrl = "" } = useSearch({ from: "/auth" })
 
-  const form = useForm<ForgotPasswordFormValues>({
-    resolver: zodResolver(forgotPasswordSchema),
-    mode: "onChange",
+  const form = useAppForm({
     defaultValues: {
       email: emailFromUrl,
       otp: "",
       newPassword: "",
       confirmPassword: "",
+    },
+    validationLogic: revalidateLogic({
+      mode: "onChange",
+      modeAfterSubmission: "submit",
+    }),
+    validators: {
+      onDynamic: forgotPasswordSchema,
+    },
+    onSubmit: async ({ value }) => {
+      handlePasswordReset(value)
     },
   })
 
