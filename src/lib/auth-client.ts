@@ -1,5 +1,6 @@
 import { adminClient, organizationClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
+import { telegramClient } from "telegram-better-auth"
 import { env } from "@/env"
 
 const authClient = createAuthClient({
@@ -7,6 +8,7 @@ const authClient = createAuthClient({
   plugins: [
     adminClient(),
     organizationClient(),
+    telegramClient(),
   ],
 })
 

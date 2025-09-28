@@ -18,7 +18,11 @@ export default defineConfig({
       "@backend": path.resolve(__dirname, "../backend"),
     },
   },
+  optimizeDeps: {
+    exclude: ["telegram-better-auth"],
+  },
   server: {
+    allowedHosts: ["urgently-tolerant-warthog.ngrok-free.app"],
     proxy: {
       "/api": {
         target:

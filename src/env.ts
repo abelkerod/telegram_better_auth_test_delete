@@ -16,6 +16,7 @@ export const env = createEnv({
     VITE_APP_TITLE: z.string().min(1).optional(),
     VITE_NODE_ENV: z.string().default("development"),
     VITE_BACKEND_URL: z.string().url(),
+    VITE_TELEGRAM_BOT_NAME: z.string(),
   },
 
   /**
